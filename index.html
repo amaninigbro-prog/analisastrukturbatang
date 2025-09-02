@@ -1,0 +1,172 @@
+<!--
+  Web informasi: Analisa Struktur Statis Tertentu - Rangka Batang
+  File: single HTML (mengandung CSS di <style>)
+  Catatan: Tidak ada perhitungan atau rumus — murni penjelasan, gambar ilustrasi, dan sumber referensi umum.
+-->
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Analisa Struktur Statis Tertentu — Rangka Batang</title>
+  <meta name="description" content="Informasi dan konsep tentang Analisa Struktur Statis Tertentu pada rangka batang (truss) — penjelasan tanpa perhitungan." />
+  <style>
+    /* Reset ringkas */
+    :root{
+      --bg:#0f1724; /* dark navy */
+      --card:#0b1220;
+      --accent1: #4f46e5; /* indigo */
+      --accent2: #06b6d4; /* teal */
+      --glass: rgba(255,255,255,0.04);
+      --muted: #9aa4b2;
+      --radius: 14px;
+      --maxw: 1100px;
+      --ff: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--ff);
+      background: radial-gradient(1200px 500px at 10% 10%, rgba(79,70,229,0.12), transparent),
+                  linear-gradient(180deg, rgba(6,182,212,0.02), rgba(255,255,255,0.00));
+      color: #e6eef6;
+      background-color:var(--bg);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:32px 20px;
+      display:flex;justify-content:center;
+    }
+    .container{
+      width:100%;max-width:var(--maxw);
+      display:grid;grid-template-columns: 1fr 360px;gap:28px;align-items:start;
+    }
+
+    header{grid-column:1 / -1;display:flex;align-items:center;gap:20px;padding:26px;border-radius:var(--radius);background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow: 0 6px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03);}
+    .hero-text{flex:1}
+    h1{margin:0;font-size:clamp(20px,3vw,28px);letter-spacing:-0.4px}
+    p.lead{margin:8px 0 0;color:var(--muted);font-size:14px}
+    .hero-illus{width:220px;height:120px;flex:0 0 220px;background:linear-gradient(135deg,var(--accent1),var(--accent2));border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    .hero-illus svg{width:100%;height:100%;opacity:0.95}
+
+    main{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
+    .card{background:var(--card);padding:18px;border-radius:12px;margin-bottom:18px;border:1px solid rgba(255,255,255,0.02)}
+    h2{margin:0 0 12px;font-size:18px}
+    .muted{color:var(--muted);font-size:14px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    ul.topic-list{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+    ul.topic-list li{background:var(--glass);padding:10px;border-radius:10px;color:var(--muted);font-size:14px}
+
+    aside{position:sticky;top:32px}
+    .sidebar-card{padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.02)}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,var(--accent1),var(--accent2));font-weight:700;font-size:12px}
+
+    .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .tile{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:10px;border-radius:10px;min-height:90px;display:flex;align-items:center;justify-content:center}
+
+    footer{grid-column:1 / -1;text-align:center;color:var(--muted);font-size:13px;padding:12px}
+
+    @media (max-width:980px){
+      .container{grid-template-columns:1fr;}
+      header{flex-direction:column;align-items:flex-start}
+      .hero-illus{width:100%;height:160px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <header>
+      <div class="hero-text">
+        <h1>Analisa Struktur Statis Tertentu — Rangka Batang (Truss)</h1>
+        <p class="lead">Panduan konseptual, komponen, dan aplikasi rangka batang. Fokus pada konsep, klasifikasi, dan ilustrasi — tanpa perhitungan.</p>
+        <p class="muted" style="margin-top:10px">Cocok untuk pengenalan, materi presentasi, dan katalog visual.</p>
+      </div>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>Apa itu Rangka Batang?</h2>
+        <p class="muted">Rangka batang (truss) adalah struktur yang terdiri dari batang lurus yang dihubungkan pada titik-titik (nodal) sehingga membentuk rangka segitiga berulang. Struktur ini banyak digunakan pada jembatan, atap, dan menara karena efisiensi memikul beban melalui gaya tarik dan tekan pada batang-batangnya.</p>
+      </section>
+
+      <section class="card">
+        <h2>Konsep Kunci</h2>
+        <div class="grid-2">
+          <div>
+            <ul class="topic-list">
+              <li><strong>Member (Batang)</strong> — komponen lurus yang mentransfer gaya.</li>
+              <li><strong>Node (Sambungan)</strong> — titik pertemuan batang-batang.</li>
+              <li><strong>Support (Tumpuan)</strong> — lokasi reaksi pada struktur (mis. tumpuan geser atau tetap).</li>
+              <li><strong>Triangulasi</strong> — segitiga adalah bentuk stabil yang mencegah deformasi mekanis sederhana.</li>
+            </ul>
+          </div>
+          <div>
+            <ul class="topic-list">
+              <li><strong>Klasifikasi</strong> — truss planar vs truss ruang (3D).</li>
+              <li><strong>Kondisi Perbatasan</strong> — bagaimana tumpuan dan beban mempengaruhi perilaku struktur.</li>
+              <li><strong>Material</strong> — baja, kayu, atau komposit mempengaruhi berat dan kekuatan.</li>
+              <li><strong>Penggunaan Umum</strong> — jembatan, atap industri, rangka crane, dan konstruksi ringan.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Bagaimana Analisa Dilakukan (Gambaran Umum)</h2>
+        <p class="muted">Analisa struktur statis tertentu biasanya mengevaluasi keadaan gaya dalam batang ketika struktur berada pada keseimbangan statis. Di sini kami hanya menyajikan jalur konsep — seperti tipe beban (tertumpu, terdistribusi), kondisi tumpuan, dan apa yang dimaksud dengan struktur "statis tertentu" — tanpa angka atau langkah perhitungan.</p>
+        <ul class="topic-list" style="margin-top:12px">
+          <li><strong>Langkah konseptual</strong>: Identifikasi geometri rangka, jenis beban, tumpuan, dan jalur gaya utama.</li>
+          <li><strong>Interpretasi hasil</strong>: Menentukan anggota yang berada pada gaya tarik atau tekan.</li>
+          <li><strong>Keamanan & faktor desain</strong>: Memilih material dan faktor keselamatan sesuai standar (standar tidak disertakan di sini).</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Ilustrasi & Diagram</h2>
+        <div class="gallery" aria-hidden="true">
+          <div class="tile">
+            <img src="gambar.jpg" alt="Diagram rangka batang 1" style="width:100%;border-radius:8px;" />
+          </div>
+      </section>
+
+      <section class="card">
+        <h2>Contoh Aplikasi (tanpa perhitungan)</h2>
+        <p class="muted">Aplikasi nyata dari rangka batang meliputi: jembatan girder ringan, atap stadion, rangka crane, dan penyangga antena. Rangka batang dipilih saat efisiensi material dan kekakuan dibutuhkan untuk menjembatani bentang tertentu.</p>
+      </section>
+    </main>
+
+    <aside>
+      <div class="sidebar-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div>
+            <div class="badge">INFO</div>
+            <div style="font-weight:700;margin-top:8px">Syarat Baca</div>
+            <div class="muted" style="font-size:13px;margin-top:6px">Halaman ini menyajikan konsep & ilustrasi. Untuk analisa numerik gunakan perangkat lunak atau dokumen referensi.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <strong>Topik terkait</strong>
+          <ul style="margin-top:8px;color:var(--muted);padding-left:18px">
+            <li>Statika dasar</li>
+            <li>Struktur batang vs balok</li>
+            <li>Material & sifat mekanis</li>
+            <li>Standar desain (lihat referensi buku/standar)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="height:18px"></div>
+
+      <div class="sidebar-card">
+        <strong>Kontak & Lisensi</strong>
+        <p class="muted" style="margin-top:8px">Materi bersifat informatif. Jika ingin menambahkan diagram lebih detail atau hak cipta, hubungi tim pengembang konten.</p>
+      </div>
+    </aside>
+
+    <footer>
+      <div>© 2025 — Portal Edukasi Struktur | Konten: Pengenalan & Ilustrasi (tanpa perhitungan)</div>
+    </footer>
+  </div>
+</body>
+</html>
