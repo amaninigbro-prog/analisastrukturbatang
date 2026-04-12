@@ -27,7 +27,7 @@
         touchAction: 'none'
     });
 
-    // --- Header (tanpa tombol "Open in new tab") ---
+    // --- Header ---
     let header = document.createElement('div');
     Object.assign(header.style, {
         display: 'flex',
@@ -50,8 +50,6 @@
         marginLeft: '5px', cursor: 'pointer', borderRadius: '3px', fontSize: '0.9em',
         touchAction: 'manipulation'
     });
-    minimizeBtn.addEventListener('mouseenter', () => minimizeBtn.style.backgroundColor = '#777');
-    minimizeBtn.addEventListener('mouseleave', () => minimizeBtn.style.backgroundColor = '#555');
 
     // Tombol Close
     let closeBtn = document.createElement('button');
@@ -61,13 +59,11 @@
         marginLeft: '5px', cursor: 'pointer', borderRadius: '3px', fontSize: '0.9em',
         touchAction: 'manipulation'
     });
-    closeBtn.addEventListener('mouseenter', () => closeBtn.style.backgroundColor = '#777');
-    closeBtn.addEventListener('mouseleave', () => closeBtn.style.backgroundColor = '#555');
 
     headerButtons.appendChild(minimizeBtn);
     headerButtons.appendChild(closeBtn);
 
-    // --- Konten iframe ---
+    // --- Konten dengan iframe ---
     let contentWrapper = document.createElement('div');
     Object.assign(contentWrapper.style, {
         flex: 1,
@@ -76,7 +72,7 @@
         overflow: 'hidden'
     });
     let iframe = document.createElement('iframe');
-    iframe.src = 'https://cheatnetwork.eu/services/quizizz';  // The website URL
+    iframe.src = 'https://cheatnetwork.eu/services/quizizz';  // URL situs web yang ingin disematkan
     Object.assign(iframe.style, {
         width: '100%',
         height: '100%',
@@ -85,35 +81,12 @@
     });
     contentWrapper.appendChild(iframe);
 
-    // --- Handle resize (pojok kanan bawah) ---
-    let resizeHandle = document.createElement('div');
-    resizeHandle.id = 'resize-handle';
-    Object.assign(resizeHandle.style, {
-        position: 'absolute',
-        bottom: '0',
-        right: '0',
-        width: '20px',
-        height: '20px',
-        cursor: 'se-resize',
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        borderBottomRightRadius: '5px',
-        zIndex: 10,
-        touchAction: 'none',
-        color: '#aaa',
-        fontSize: '16px',
-        lineHeight: '16px',
-        textAlign: 'center',
-        userSelect: 'none'
-    });
-    resizeHandle.innerHTML = '▗';
-
     // Gabungkan elemen utama
     floatDiv.appendChild(header);
     floatDiv.appendChild(contentWrapper);
-    floatDiv.appendChild(resizeHandle);
     document.body.appendChild(floatDiv);
 
-    // --- Tombol restore (lingkaran kecil semi-transparan) ---
+    // --- Tombol restore ---
     let restoreBtn = document.createElement('div');
     restoreBtn.id = 'omegas-restore-button';
     Object.assign(restoreBtn.style, {
@@ -145,21 +118,6 @@
 
     // --- State ---
     let isMinimized = false;
-    const minWidth = 200, minHeight = 150;
-    const maxWidth = window.innerWidth * 0.9, maxHeight = window.innerHeight * 0.9;
-    let originalWidth = parseFloat(floatDiv.style.width);
-    let originalHeight = parseFloat(floatDiv.style.height);
-
-    function resizeContainer(w, h) {
-        w = Math.min(maxWidth, Math.max(minWidth, w));
-        h = Math.min(maxHeight, Math.max(minHeight, h));
-        floatDiv.style.width = w + 'px';
-        floatDiv.style.height = h + 'px';
-        if (!isMinimized) {
-            originalWidth = w;
-            originalHeight = h;
-        }
-    }
 
     // --- Event listeners tombol ---
     minimizeBtn.addEventListener('click', () => {
@@ -178,51 +136,6 @@
     restoreBtn.addEventListener('click', () => {
         restoreBtn.style.display = 'none';
         floatDiv.style.display = 'flex';
-        resizeContainer(originalWidth, originalHeight);
         isMinimized = false;
     });
-
-    // --- Drag untuk jendela utama ---
-    let isDragging = false;
-    let dragStartX, dragStartY, dragStartLeft, dragStartTop;
-
-    function onDragStart(e) {
-        e.preventDefault();
-        let pos = getClientPos(e);
-        isDragging = true;
-        dragStartX = pos.x;
-        dragStartY = pos.y;
-        dragStartLeft = floatDiv.offsetLeft;
-        dragStartTop = floatDiv.offsetTop;
-        header.style.cursor = 'grabbing';
-    }
-
-    function onDragMove(e) {
-        if (!isDragging) return;
-        e.preventDefault();
-        let pos = getClientPos(e);
-        let dx = pos.x - dragStartX;
-        let dy = pos.y - dragStartY;
-        let newLeft = dragStartLeft + dx;
-        let newTop = dragStartTop + dy;
-        newLeft = Math.max(0, Math.min(window.innerWidth - floatDiv.offsetWidth, newLeft));
-        newTop = Math.max(0, Math.min(window.innerHeight - floatDiv.offsetHeight, newTop));
-        floatDiv.style.left = newLeft + 'px';
-        floatDiv.style.top = newTop + 'px';
-    }
-
-    function onDragEnd(e) {
-        if (isDragging) {
-            isDragging = false;
-            header.style.cursor = 'grab';
-        }
-    }
-
-    header.addEventListener('mousedown', onDragStart);
-    header.addEventListener('touchstart', onDragStart, { passive: false });
-    document.addEventListener('mousemove', onDragMove);
-    document.addEventListener('touchmove', onDragMove, { passive: false });
-    document.addEventListener('mouseup', onDragEnd);
-    document.addEventListener('touchend', onDragEnd);
-    document.addEventListener('touchcancel', onDragEnd);
 })();
